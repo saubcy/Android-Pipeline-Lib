@@ -1,0 +1,4 @@
+Android Pipeline（https://github.com/saubcy/Android-Pipeline）的辅助库工程，用来提供一套封装好的统一广告平台和统计平台接口。
+目前支持的广告平台包括：admob, adwo, appmedia, youmi
+目前支持的虚拟货币平台包括：tapjoy, waps, wiyun, youmi
+目前支持的统计平台包括：umeng
