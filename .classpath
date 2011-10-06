@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="libs/AppOffer_1.5.2.jar"/>
 	<classpathentry kind="lib" path="libs/tapjoy_8.1.1.jar"/>
 	<classpathentry kind="lib" path="libs/Analytics_Android_SDK_3.0.jar"/>
+	<classpathentry kind="lib" path="libs/adwosdk2.3.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

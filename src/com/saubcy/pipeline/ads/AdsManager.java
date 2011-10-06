@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
+import com.adwo.adsdk.AdwoAdView;
 import com.saubcy.conf.Config;
 
 public class AdsManager {
@@ -44,8 +45,12 @@ public class AdsManager {
 		}
 	}
 
-	public static void destoryAds(View adView) {
-
+	public static void destoryAds(Offers offer, View adView) {
+		switch (offer) {
+		case ADWO:
+			destoryADWO(adView);
+			break;
+		}
 	}
 
 	private static void showADWO(Activity content, 
@@ -54,7 +59,7 @@ public class AdsManager {
 		String TAG_USE = TAG + "showADWO";
 
 		if ( Config.getLOGGING() ) {
-			Log.d(TAG_USE, "add adwo pid: "+Config.getAdMob_PID());
+			Log.d(TAG_USE, "add adwo pid: "+Config.getAdwo_PID());
 		}
 		try {
 			Class<?> AdwoAdView = 
@@ -62,7 +67,7 @@ public class AdsManager {
 
 			Object[] args = new Object[6];
 			args[0] = content.getApplicationContext();
-			args[1] = Config.getAdMob_PID();
+			args[1] = Config.getAdwo_PID();
 			args[2] = 0x0040080;
 			args[3] = 0x00FF0000;
 			args[4] = Config.getTESTMODE();
@@ -130,6 +135,15 @@ public class AdsManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
+	}
+	
+	private static void destoryADWO(View adView) {
+		if ( null == adView ) {
+			return;
+		}
+		
+		AdwoAdView view = (AdwoAdView)adView;
+		view.finalize();
 	}
 
 	private static void showADMOB(Activity content, 
