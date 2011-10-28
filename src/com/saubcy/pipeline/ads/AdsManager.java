@@ -25,7 +25,7 @@ public class AdsManager {
 	private static boolean isMiidiInit = false;
 
 	public enum Offers {
-		NONE, ADMOB, ADWO, YOUMI, APPMEDIA, MIIDI
+		NONE, ADMOB, ADWO, YOUMI, APPMEDIA, MIIDI, WIYUN
 	};
 
 	public static void showAds(Offers offer, 
@@ -47,6 +47,9 @@ public class AdsManager {
 			break;
 		case MIIDI:
 			showMIIDI(content, layout, adView);
+			break;
+		case WIYUN:
+			showWIYUN(content, layout, adView);
 			break;
 		}
 	}
@@ -444,6 +447,19 @@ public class AdsManager {
 		layout.addView(adView, new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT) );
 	}
+	
+	private static void showWIYUN(Activity content, 
+			LinearLayout layout, 
+			View adView) {
+
+		adView = new com.wiyun.ad.AdView(content);
+		((com.wiyun.ad.AdView) adView).setResId(Config.getWIYUN_WIADID());
+		((com.wiyun.ad.AdView) adView).setGoneIfFail(true);
+		
+		layout.addView(adView, new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.WRAP_CONTENT) );
+		((com.wiyun.ad.AdView) adView).requestAd();
+	}
 
 	private static void initAPPMEDIA() {
 		String TAG_USE = TAG + "initAPPMEDIA";
@@ -502,4 +518,5 @@ public class AdsManager {
 		AdkManager.initialParam(Integer.parseInt(Config.getMiidi_APPID()),
 				Config.getMiidi_APPSEC());
 	}
+	
 }

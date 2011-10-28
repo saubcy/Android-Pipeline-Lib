@@ -53,6 +53,10 @@ public class Config
 	public static String getMiidi_APPSEC() {
 		return "@CONFIG.ADS.MIIDI.APPSEC@";
 	}
+	
+	public static String getWIYUN_WIADID() {
+		return "@CONFIG.ADS.WIYUN.WIADID@";
+	}
 
 	// GOLD OFFER IDS
 	public static String getYoumi_Gold_APPID() {
