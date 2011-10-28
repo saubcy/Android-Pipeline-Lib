@@ -1,5 +1,6 @@
 package com.saubcy.pipeline.gold;
 
+import net.miidi.credit.MiidiCredit;
 import android.app.Activity;
 
 import com.saubcy.conf.Config;
@@ -15,7 +16,7 @@ public class GoldManager implements InnerNotifier{
 	private Offers offerType = Offers.NONE;
 
 	public enum Offers {
-		NONE, YOUMI, WIYUN, WAPS, TAPJOY
+		NONE, YOUMI, WIYUN, WAPS, TAPJOY, MIIDI
 	};
 
 	private int golds = 0;
@@ -49,6 +50,9 @@ public class GoldManager implements InnerNotifier{
 		case TAPJOY:
 			initTAPJOY(content);
 			break;
+		case MIIDI:
+			initMIIDI(content);
+			break;
 		}
 	}
 
@@ -69,6 +73,9 @@ public class GoldManager implements InnerNotifier{
 			break;
 		case TAPJOY:
 			showOfferTAPJOY();
+			break;
+		case MIIDI:
+			showOfferMIIDI(content);
 			break;
 		}
 	}
@@ -91,6 +98,9 @@ public class GoldManager implements InnerNotifier{
 		case TAPJOY:
 			refreshTAPJOY();
 			break;
+		case MIIDI:
+			refreshMIIDI(content, true);
+			break;
 		}
 	}
 
@@ -110,6 +120,9 @@ public class GoldManager implements InnerNotifier{
 			spendGoldWAPS(content, amount);
 		case TAPJOY:
 			spendGoldTAPJOY(amount);
+			break;
+		case MIIDI:
+			spendGoldMIIDI(content, amount);
 			break;
 		}
 	}
@@ -310,6 +323,50 @@ public class GoldManager implements InnerNotifier{
 		
 		TapjoyConnect.getTapjoyConnectInstance()
 		.spendTapPoints(amount, new TapjoyAgent(this));
+	}
+	
+	private void initMIIDI(Activity content) {
+		
+		MiidiCredit.init(content, 
+				Config.getMiidi_APPID(), 
+				Config.getMiidi_APPSEC(), 
+				Config.getTESTMODE());
+	}
+	
+	private void showOfferMIIDI(Activity content) {
+
+		MiidiCredit.showAppOffers(content);
+
+	}
+	
+	private void refreshMIIDI(Activity content, boolean forceNotify) {
+
+		int tmp = MiidiCredit.getPoints(content);
+		if ( golds != tmp ) {
+			golds = tmp;
+			gn.notifyUpdate(golds);
+		} else if ( forceNotify ) {
+			gn.notifyUpdate(golds);
+		}
+	}
+	
+	private void spendGoldMIIDI(Activity content, 
+			int amount) {
+
+		refreshMIIDI(content, false);
+
+		if ( golds < amount ) {
+			gn.notifyFailed("miidi gold not enough");
+			return;
+		}
+
+		boolean res = MiidiCredit.spendPoints(content, amount);
+		if ( res ) {
+			golds -= amount;
+			gn.notifyUpdate(golds);
+		} else {
+			gn.notifyFailed("miidi gold spend failed");
+		}
 	}
 	
 	@Override

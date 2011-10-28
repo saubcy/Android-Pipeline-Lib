@@ -20,7 +20,7 @@ public class Config
 	public static boolean getTESTMODE() {
 		return true;
 	}
-
+	
 	public static GoldManager.Offers getGoldOffer() {
 		return GoldManager.Offers.NONE;
 	}
@@ -44,6 +44,14 @@ public class Config
 
 	public static String getAppMedia_PID() {
 		return "@CONFIG.ADS.APPMEDIA.PID@";
+	}
+	
+	public static String getMiidi_APPID() {
+		return "@CONFIG.ADS.MIIDI.APPID@";
+	}
+	
+	public static String getMiidi_APPSEC() {
+		return "@CONFIG.ADS.MIIDI.APPSEC@";
 	}
 
 	// GOLD OFFER IDS
@@ -74,4 +82,13 @@ public class Config
 	public static String getTapjoy_Gold_APPSEC() {
 		return "@CONFIG.GOLD.TAPJOY.APPSEC@";
 	}
+	
+	public static String getMiidi_Gold_APPID() {
+		return "@CONFIG.GOLD.MIIDI.APPID@";
+	}
+	
+	public static String getMiidi_Gold_APPSEC() {
+		return "@CONFIG.GOLD.MIIDI.APPSEC@";
+	}
+	
 }

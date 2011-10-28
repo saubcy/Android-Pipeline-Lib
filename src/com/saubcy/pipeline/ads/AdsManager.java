@@ -11,18 +11,21 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
+import com.adpooh.adscast.banner.AdkBannerView;
+import com.adpooh.adscast.banner.AdkManager;
 import com.adwo.adsdk.AdwoAdView;
 import com.saubcy.conf.Config;
 
 public class AdsManager {
 
 	private static final String TAG = "TRACE_AdsFactory_";
-	
+
 	private static boolean isYoumiInit = false;
 	private static boolean isAppMediaInit = false;
+	private static boolean isMiidiInit = false;
 
 	public enum Offers {
-		NONE, ADMOB, ADWO, YOUMI, APPMEDIA
+		NONE, ADMOB, ADWO, YOUMI, APPMEDIA, MIIDI
 	};
 
 	public static void showAds(Offers offer, 
@@ -41,6 +44,9 @@ public class AdsManager {
 			break;
 		case APPMEDIA:
 			showAPPMEDIA(content, layout, adView);
+			break;
+		case MIIDI:
+			showMIIDI(content, layout, adView);
 			break;
 		}
 	}
@@ -136,12 +142,12 @@ public class AdsManager {
 			e.printStackTrace();
 		}  
 	}
-	
+
 	private static void destoryADWO(View adView) {
 		if ( null == adView ) {
 			return;
 		}
-		
+
 		AdwoAdView view = (AdwoAdView)adView;
 		view.finalize();
 	}
@@ -313,7 +319,7 @@ public class AdsManager {
 			e.printStackTrace();
 		}  
 	}
-	
+
 	private static void initYOUMI() {
 		if ( isYoumiInit ) {
 			return;
@@ -343,7 +349,7 @@ public class AdsManager {
 			Method method = AdManager.getMethod("init", argsClass);
 			method.invoke(null, args);
 			isYoumiInit = true;
-			
+
 		} catch (ClassNotFoundException e) {
 			if ( Config.getLOGGING() ) {
 				Log.d(TAG_USE, "ClassNotFoundException");
@@ -368,7 +374,7 @@ public class AdsManager {
 			e.printStackTrace();
 		} 
 	}
-	
+
 	private static void showAPPMEDIA(Activity content, 
 			LinearLayout layout, 
 			View adView) {
@@ -428,7 +434,17 @@ public class AdsManager {
 			e.printStackTrace();
 		}  
 	}
-	
+
+	private static void showMIIDI(Activity content, 
+			LinearLayout layout, 
+			View adView) {
+		initMiidi();
+
+		adView = new AdkBannerView(content);
+		layout.addView(adView, new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.WRAP_CONTENT) );
+	}
+
 	private static void initAPPMEDIA() {
 		String TAG_USE = TAG + "initAPPMEDIA";
 		if ( isAppMediaInit ) {
@@ -452,7 +468,7 @@ public class AdsManager {
 			Method method = AdManager.getMethod("setAid", argsClass);
 			method.invoke(null, args);
 			isAppMediaInit = true;
-			
+
 		} catch (ClassNotFoundException e) {
 			if ( Config.getLOGGING() ) {
 				Log.d(TAG_USE, "ClassNotFoundException");
@@ -476,5 +492,14 @@ public class AdsManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+	}
+
+	private static void initMiidi() {
+		if ( isMiidiInit ) {
+			return;
+		}
+
+		AdkManager.initialParam(Integer.parseInt(Config.getMiidi_APPID()),
+				Config.getMiidi_APPSEC());
 	}
 }

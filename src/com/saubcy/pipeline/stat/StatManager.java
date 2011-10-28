@@ -73,4 +73,5 @@ public class StatManager {
 			String eventName, String eventLabel) {
 		MobclickAgent.onEvent(content, eventName, eventLabel);
 	}
+	
 }
