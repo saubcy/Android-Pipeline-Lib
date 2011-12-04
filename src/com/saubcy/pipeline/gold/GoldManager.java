@@ -24,9 +24,9 @@ public class GoldManager implements InnerNotifier{
 	private boolean isYoumiInit = false;
 	private boolean isWiyunInit = false;
 	private boolean isTapjoyInit = false;
-	
+
 	public GoldManager() {
-		
+
 	}
 
 	public int getGold() {
@@ -166,7 +166,7 @@ public class GoldManager implements InnerNotifier{
 			gn.notifyFailed("youmi gold not init");
 			return;
 		}
-		
+
 		refreshYOUMI(content, false);
 
 		if ( golds < amount ) {
@@ -264,49 +264,49 @@ public class GoldManager implements InnerNotifier{
 
 		WiOffer.useCoins(amount);
 	}
-	
+
 	private void showOfferWAPS(Activity content) {
 		AppConnect.getInstance(content).showOffers(content);
 	}
-	
+
 	private void refreshWAPS(Activity content) {
 		AppConnect.getInstance(content).getPoints(new WapsAgent(this));
 	}
-	
+
 	private void spendGoldWAPS(Activity content, int amount) {
-		
+
 		refreshWAPS(content);
-		
+
 		AppConnect.getInstance(content)
 		.spendPoints(amount, new WapsAgent(this));
 	}
-	
+
 	private void initTAPJOY(Activity content) {
-		
+
 		if ( isTapjoyInit ) {
 			return;
 		}
-		
+
 		TapjoyLog.enableLogging(Config.getLOGGING());
 		TapjoyConnect.requestTapjoyConnect(content.getApplicationContext(), 
 				Config.getTapjoy_Gold_APPID(), 
 				Config.getTapjoy_Gold_APPSEC());
 		isTapjoyInit = true;
 	}
-	
+
 	private void showOfferTAPJOY() {
 		if ( !isTapjoyInit ) {
 			return;
 		}
-		
+
 		TapjoyConnect.getTapjoyConnectInstance().showOffers();
 	}
-	
+
 	private void refreshTAPJOY() {
 		if ( !isTapjoyInit ) {
 			return;
 		}
-		
+
 		TapjoyConnect.getTapjoyConnectInstance()
 		.getTapPoints(new TapjoyAgent(this));
 	}
@@ -315,30 +315,30 @@ public class GoldManager implements InnerNotifier{
 		if ( !isTapjoyInit ) {
 			return;
 		}
-		
+
 		if ( golds < amount ) {
 			gn.notifyFailed("tapjoy gold not enough");
 			return;
 		}
-		
+
 		TapjoyConnect.getTapjoyConnectInstance()
 		.spendTapPoints(amount, new TapjoyAgent(this));
 	}
-	
+
 	private void initMIIDI(Activity content) {
-		
+
 		MiidiCredit.init(content, 
 				Config.getMiidi_APPID(), 
 				Config.getMiidi_APPSEC(), 
 				Config.getTESTMODE());
 	}
-	
+
 	private void showOfferMIIDI(Activity content) {
 
 		MiidiCredit.showAppOffers(content);
 
 	}
-	
+
 	private void refreshMIIDI(Activity content, boolean forceNotify) {
 
 		int tmp = MiidiCredit.getPoints(content);
@@ -349,7 +349,7 @@ public class GoldManager implements InnerNotifier{
 			gn.notifyUpdate(golds);
 		}
 	}
-	
+
 	private void spendGoldMIIDI(Activity content, 
 			int amount) {
 
@@ -368,7 +368,7 @@ public class GoldManager implements InnerNotifier{
 			gn.notifyFailed("miidi gold spend failed");
 		}
 	}
-	
+
 	@Override
 	public void notifyUpdate(String currencyName, int num) {
 		int delta = 0;
@@ -384,7 +384,7 @@ public class GoldManager implements InnerNotifier{
 			gn.notifyUpdate(delta);
 			break;
 		}
-		
+
 	}
 
 	@Override

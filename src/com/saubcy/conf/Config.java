@@ -57,6 +57,18 @@ public class Config
 	public static String getWIYUN_WIADID() {
 		return "@CONFIG.ADS.WIYUN.WIADID@";
 	}
+	
+	public static String getADULTMODA_BANNER_ZONEID() {
+		return "@CONFIG.ADS.ADULTMODA.BANNER.ZONEID@";
+	}
+	
+	public static String getADULTMODA_TEXT_ZONEID() {
+		return "@CONFIG.ADS.ADULTMODA.TEXT.ZONEID@";
+	}
+	
+	public static String getVPON_SDKKEY() {
+		return "@CONFIG.ADS.VPON.SDKKEY@";
+	}
 
 	// GOLD OFFER IDS
 	public static String getYoumi_Gold_APPID() {

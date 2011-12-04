@@ -25,7 +25,8 @@ public class AdsManager {
 	private static boolean isMiidiInit = false;
 
 	public enum Offers {
-		NONE, ADMOB, ADWO, YOUMI, APPMEDIA, MIIDI, WIYUN
+		NONE, ADMOB, ADWO, YOUMI, APPMEDIA, MIIDI, WIYUN,
+		ADULTMODA,
 	};
 
 	public static void showAds(Offers offer, 
@@ -50,6 +51,9 @@ public class AdsManager {
 			break;
 		case WIYUN:
 			showWIYUN(content, layout, adView);
+			break;
+		case ADULTMODA:
+			showADULTMODA(content, layout, adView);
 			break;
 		}
 	}
@@ -517,6 +521,19 @@ public class AdsManager {
 
 		AdkManager.initialParam(Integer.parseInt(Config.getMiidi_APPID()),
 				Config.getMiidi_APPSEC());
+	}
+	
+	private static void showADULTMODA(Activity content, 
+			LinearLayout layout, 
+			View adView) {
+
+		adView = new com.admoda.AdView(content);
+		((com.admoda.AdView) adView).setTextZoneId
+		(Integer.parseInt(Config.getADULTMODA_TEXT_ZONEID()));
+		((com.admoda.AdView) adView).setBannerZoneId
+		(Integer.parseInt(Config.getADULTMODA_BANNER_ZONEID()));
+		layout.addView(adView, new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.WRAP_CONTENT) );
 	}
 	
 }
