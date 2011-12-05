@@ -14,6 +14,7 @@ public class GoldManager implements InnerNotifier{
 
 	private GoldNotifier gn = null;
 	private Offers offerType = Offers.NONE;
+	private int iconid = -1;
 
 	public enum Offers {
 		NONE, YOUMI, WIYUN, WAPS, TAPJOY, MIIDI
@@ -24,6 +25,10 @@ public class GoldManager implements InnerNotifier{
 	private boolean isYoumiInit = false;
 	private boolean isWiyunInit = false;
 	private boolean isTapjoyInit = false;
+	
+	public void setIcon(int id) {
+		iconid = id;
+	}
 
 	public GoldManager() {
 
@@ -328,9 +333,12 @@ public class GoldManager implements InnerNotifier{
 	private void initMIIDI(Activity content) {
 
 		MiidiCredit.init(content, 
-				Config.getMiidi_APPID(), 
-				Config.getMiidi_APPSEC(), 
+				Config.getMiidi_Gold_APPID(), 
+				Config.getMiidi_Gold_APPSEC(), 
 				Config.getTESTMODE());
+		
+		MiidiCredit.setPushAdIcon(iconid);
+		MiidiCredit.getPushAd(content);
 	}
 
 	private void showOfferMIIDI(Activity content) {
