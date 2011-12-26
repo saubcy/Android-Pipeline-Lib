@@ -6,6 +6,7 @@ import android.app.Activity;
 import com.saubcy.conf.Config;
 import com.tapjoy.TapjoyConnect;
 import com.tapjoy.TapjoyLog;
+import com.uucun.adsdk.UUAppConnect;
 import com.waps.AppConnect;
 import com.wiyun.offer.WiOffer;
 import com.wiyun.offer.WiOfferClient;
@@ -17,7 +18,7 @@ public class GoldManager implements InnerNotifier{
 	private int iconid = -1;
 
 	public enum Offers {
-		NONE, YOUMI, WIYUN, WAPS, TAPJOY, MIIDI
+		NONE, YOUMI, WIYUN, WAPS, TAPJOY, MIIDI, APPJOY,
 	};
 
 	private int golds = 0;
@@ -25,6 +26,7 @@ public class GoldManager implements InnerNotifier{
 	private boolean isYoumiInit = false;
 	private boolean isWiyunInit = false;
 	private boolean isTapjoyInit = false;
+	private boolean isAppjoyInit = false;
 	
 	public void setIcon(int id) {
 		iconid = id;
@@ -58,6 +60,9 @@ public class GoldManager implements InnerNotifier{
 		case MIIDI:
 			initMIIDI(content);
 			break;
+		case APPJOY:
+			initAPPJOY(content);
+			break;
 		}
 	}
 
@@ -81,6 +86,9 @@ public class GoldManager implements InnerNotifier{
 			break;
 		case MIIDI:
 			showOfferMIIDI(content);
+			break;
+		case APPJOY:
+			showOfferAPPJOY(content);
 			break;
 		}
 	}
@@ -106,6 +114,9 @@ public class GoldManager implements InnerNotifier{
 		case MIIDI:
 			refreshMIIDI(content, true);
 			break;
+		case APPJOY:
+			refreshAPPJOY(content);
+			break;
 		}
 	}
 
@@ -129,8 +140,12 @@ public class GoldManager implements InnerNotifier{
 		case MIIDI:
 			spendGoldMIIDI(content, amount);
 			break;
+		case APPJOY:
+			spendGoldAPPJOY(content, amount);
+			break;
 		}
 	}
+	
 
 	private void initYOUMI(Activity content) {
 
@@ -140,12 +155,14 @@ public class GoldManager implements InnerNotifier{
 				Config.getTESTMODE());
 		isYoumiInit = true;
 	}
+	
 
 	private void showOfferYOUMI(Activity content) {
 
 		net.youmi.android.appoffers.AppOffersManager.showAppOffers(content);
 
 	}
+	
 
 	private void refreshYOUMI(Activity content, boolean forceNotify) {
 
@@ -376,23 +393,57 @@ public class GoldManager implements InnerNotifier{
 			gn.notifyFailed("miidi gold spend failed");
 		}
 	}
+	
+	private void initAPPJOY(Activity content) {
+		if ( isAppjoyInit ) {
+			return;
+		}
+		UUAppConnect.getInstance(content).initSdk();
+		isAppjoyInit = true;
+	}
+	
+	private void showOfferAPPJOY(Activity content) {
+		if ( !isAppjoyInit ) {
+			return;
+		}
+		UUAppConnect.getInstance(content).showOffers();
+	}
+	
+	private void refreshAPPJOY(Activity content) {
+		if ( !isAppjoyInit ) {
+			return;
+		}
+		UUAppConnect.getInstance(content)
+		.getPoints(new AppjoyAgent(this));
+	}
+	
+	private void spendGoldAPPJOY(Activity content, 
+			int amount) {
+		if ( !isAppjoyInit ) {
+			return;
+		}
+
+		if ( golds < amount ) {
+			gn.notifyFailed("appjoy gold not enough");
+			return;
+		}
+
+		UUAppConnect.getInstance(content)
+		.spendPoints(amount,new AppjoyAgent(this));
+	}
 
 	@Override
 	public void notifyUpdate(String currencyName, int num) {
 		int delta = 0;
 		switch (offerType) {
 		case TAPJOY:
-			delta = num - golds;
-			golds = num;
-			gn.notifyUpdate(delta);
-			break;
 		case WAPS:
+		case APPJOY:
 			delta = num - golds;
 			golds = num;
 			gn.notifyUpdate(delta);
 			break;
 		}
-
 	}
 
 	@Override

@@ -15,6 +15,7 @@ import com.adpooh.adscast.banner.AdkBannerView;
 import com.adpooh.adscast.banner.AdkManager;
 import com.adwo.adsdk.AdwoAdView;
 import com.saubcy.conf.Config;
+import com.uucun.adsdk.UUAppConnect;
 
 public class AdsManager {
 
@@ -26,7 +27,7 @@ public class AdsManager {
 
 	public enum Offers {
 		NONE, ADMOB, ADWO, YOUMI, APPMEDIA, MIIDI, WIYUN,
-		ADULTMODA,
+		ADULTMODA, APPJOY,
 	};
 
 	public static void showAds(Offers offer, 
@@ -55,13 +56,20 @@ public class AdsManager {
 		case ADULTMODA:
 			showADULTMODA(content, layout, adView);
 			break;
+		case APPJOY:
+			showAPPJOY(content, layout);
+			break;
 		}
 	}
 
-	public static void destoryAds(Offers offer, View adView) {
+	public static void destoryAds(Offers offer, 
+			View adView, Activity content) {
 		switch (offer) {
 		case ADWO:
 			destoryADWO(adView);
+			break;
+		case APPJOY:
+			destoryAPPJOY(content);
 			break;
 		}
 	}
@@ -523,6 +531,10 @@ public class AdsManager {
 				Config.getMiidi_APPSEC());
 	}
 	
+	private static void destoryAPPJOY(Activity content) {
+		UUAppConnect.getInstance(content).exitSdk();
+	}
+	
 	private static void showADULTMODA(Activity content, 
 			LinearLayout layout, 
 			View adView) {
@@ -534,6 +546,12 @@ public class AdsManager {
 		(Integer.parseInt(Config.getADULTMODA_BANNER_ZONEID()));
 		layout.addView(adView, new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT) );
+	}
+	
+	private static void showAPPJOY(Activity content, 
+			LinearLayout layout) {
+		UUAppConnect.getInstance(content)
+		.showBanner(layout , 20);
 	}
 	
 }
