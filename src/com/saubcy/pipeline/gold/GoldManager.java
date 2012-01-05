@@ -146,7 +146,18 @@ public class GoldManager implements InnerNotifier{
 		}
 	}
 	
-
+	public void awardGold(Offers offer, 
+			Activity content, int amount) {
+		gn = (GoldNotifier)content;
+		offerType = offer;
+		
+		switch (offer) {
+		case TAPJOY:
+			awardGoldTAPJOY(amount);
+			break;
+		}
+	}
+	
 	private void initYOUMI(Activity content) {
 
 		net.youmi.android.appoffers.AppOffersManager.init(content, 
@@ -156,14 +167,12 @@ public class GoldManager implements InnerNotifier{
 		isYoumiInit = true;
 	}
 	
-
 	private void showOfferYOUMI(Activity content) {
 
 		net.youmi.android.appoffers.AppOffersManager.showAppOffers(content);
 
 	}
 	
-
 	private void refreshYOUMI(Activity content, boolean forceNotify) {
 
 		if ( !isYoumiInit ) {
@@ -347,6 +356,20 @@ public class GoldManager implements InnerNotifier{
 		.spendTapPoints(amount, new TapjoyAgent(this));
 	}
 
+	private void awardGoldTAPJOY(int amount) {
+		if ( !isTapjoyInit ) {
+			return;
+		}
+
+		if ( amount < 0 ) {
+			gn.notifyFailed("award must more then 0");
+			return;
+		}
+
+		TapjoyConnect.getTapjoyConnectInstance()
+		.awardTapPoints(amount, new TapjoyAgent(this));
+	}
+	
 	private void initMIIDI(Activity content) {
 
 		MiidiCredit.init(content, 
