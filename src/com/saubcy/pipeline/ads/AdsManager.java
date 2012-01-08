@@ -30,36 +30,29 @@ public class AdsManager {
 		ADULTMODA, APPJOY,
 	};
 
-	public static void showAds(Offers offer, 
+	public static View showAds(Offers offer, 
 			Activity content, 
 			LinearLayout layout, 
 			View adView) {
 		switch (offer) {
 		case ADMOB:
-			showADMOB(content, layout, adView);
-			break;
+			return showADMOB(content, layout, adView);
 		case ADWO:
-			showADWO(content, layout, adView);
-			break;
+			return showADWO(content, layout, adView);
 		case YOUMI:
-			showYOUMI(content, layout, adView);
-			break;
+			return showYOUMI(content, layout, adView);
 		case APPMEDIA:
-			showAPPMEDIA(content, layout, adView);
-			break;
+			return showAPPMEDIA(content, layout, adView);
 		case MIIDI:
-			showMIIDI(content, layout, adView);
-			break;
+			return showMIIDI(content, layout, adView);
 		case WIYUN:
-			showWIYUN(content, layout, adView);
-			break;
+			return showWIYUN(content, layout, adView);
 		case ADULTMODA:
-			showADULTMODA(content, layout, adView);
-			break;
+			return showADULTMODA(content, layout, adView);
 		case APPJOY:
-			showAPPJOY(content, layout);
-			break;
+			return showAPPJOY(content, layout);
 		}
+		return null;
 	}
 
 	public static void destoryAds(Offers offer, 
@@ -74,7 +67,7 @@ public class AdsManager {
 		}
 	}
 
-	private static void showADWO(Activity content, 
+	private static View showADWO(Activity content, 
 			LinearLayout layout, 
 			View adView) {
 		String TAG_USE = TAG + "showADWO";
@@ -156,6 +149,8 @@ public class AdsManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
+		
+		return adView;
 	}
 
 	private static void destoryADWO(View adView) {
@@ -167,7 +162,7 @@ public class AdsManager {
 		view.finalize();
 	}
 
-	private static void showADMOB(Activity content, 
+	private static View showADMOB(Activity content, 
 			LinearLayout layout, 
 			View adView) {
 		String TAG_USE = TAG + "showADMOB";
@@ -273,9 +268,11 @@ public class AdsManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
+		
+		return adView;
 	}
 
-	private static void showYOUMI(Activity content, 
+	private static View showYOUMI(Activity content, 
 			LinearLayout layout, 
 			View adView) {
 		initYOUMI();
@@ -333,6 +330,8 @@ public class AdsManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
+		
+		return adView;
 	}
 
 	private static void initYOUMI() {
@@ -390,7 +389,7 @@ public class AdsManager {
 		} 
 	}
 
-	private static void showAPPMEDIA(Activity content, 
+	private static View showAPPMEDIA(Activity content, 
 			LinearLayout layout, 
 			View adView) {
 		initAPPMEDIA();
@@ -448,9 +447,11 @@ public class AdsManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
+		
+		return adView;
 	}
 
-	private static void showMIIDI(Activity content, 
+	private static View showMIIDI(Activity content, 
 			LinearLayout layout, 
 			View adView) {
 		initMiidi();
@@ -458,19 +459,23 @@ public class AdsManager {
 		adView = new AdkBannerView(content);
 		layout.addView(adView, new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT) );
+		
+		return adView;
 	}
-	
-	private static void showWIYUN(Activity content, 
+
+	private static View showWIYUN(Activity content, 
 			LinearLayout layout, 
 			View adView) {
 
 		adView = new com.wiyun.ad.AdView(content);
 		((com.wiyun.ad.AdView) adView).setResId(Config.getWIYUN_WIADID());
 		((com.wiyun.ad.AdView) adView).setGoneIfFail(true);
-		
+
 		layout.addView(adView, new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT) );
 		((com.wiyun.ad.AdView) adView).requestAd();
+		
+		return adView;
 	}
 
 	private static void initAPPMEDIA() {
@@ -530,12 +535,12 @@ public class AdsManager {
 		AdkManager.initialParam(Integer.parseInt(Config.getMiidi_APPID()),
 				Config.getMiidi_APPSEC());
 	}
-	
+
 	private static void destoryAPPJOY(Activity content) {
 		UUAppConnect.getInstance(content).exitSdk();
 	}
-	
-	private static void showADULTMODA(Activity content, 
+
+	private static View showADULTMODA(Activity content, 
 			LinearLayout layout, 
 			View adView) {
 
@@ -546,12 +551,14 @@ public class AdsManager {
 		(Integer.parseInt(Config.getADULTMODA_BANNER_ZONEID()));
 		layout.addView(adView, new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT) );
+		return adView;
 	}
-	
-	private static void showAPPJOY(Activity content, 
+
+	private static View showAPPJOY(Activity content, 
 			LinearLayout layout) {
 		UUAppConnect.getInstance(content)
 		.showBanner(layout , 20);
+		return null;
 	}
-	
+
 }
