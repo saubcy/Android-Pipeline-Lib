@@ -2,6 +2,7 @@ package com.saubcy.pipeline.gold;
 
 import net.miidi.credit.MiidiCredit;
 import android.app.Activity;
+import android.content.Context;
 
 import com.saubcy.conf.Config;
 import com.tapjoy.TapjoyConnect;
@@ -41,7 +42,7 @@ public class GoldManager implements InnerNotifier{
 	}
 
 	public void init(Offers offer, 
-			Activity content) {
+			Context content) {
 		gn = (GoldNotifier)content;
 		offerType = offer;
 
@@ -67,7 +68,7 @@ public class GoldManager implements InnerNotifier{
 	}
 
 	public void showOffer(Offers offer, 
-			Activity content) {
+			Context content) {
 		gn = (GoldNotifier)content;
 		offerType = offer;
 
@@ -94,7 +95,7 @@ public class GoldManager implements InnerNotifier{
 	}
 
 	public void refreshGold(Offers offer, 
-			Activity content) {
+			Context content) {
 		gn = (GoldNotifier)content;
 		offerType = offer;
 
@@ -158,22 +159,22 @@ public class GoldManager implements InnerNotifier{
 		}
 	}
 	
-	private void initYOUMI(Activity content) {
+	private void initYOUMI(Context content) {
 
-		net.youmi.android.appoffers.AppOffersManager.init(content, 
+		net.youmi.android.appoffers.AppOffersManager.init((Activity) content, 
 				Config.getYoumi_Gold_APPID(), 
 				Config.getYoumi_Gold_APPSEC(), 
 				Config.getTESTMODE());
 		isYoumiInit = true;
 	}
 	
-	private void showOfferYOUMI(Activity content) {
+	private void showOfferYOUMI(Context content) {
 
 		net.youmi.android.appoffers.AppOffersManager.showAppOffers(content);
 
 	}
 	
-	private void refreshYOUMI(Activity content, boolean forceNotify) {
+	private void refreshYOUMI(Context content, boolean forceNotify) {
 
 		if ( !isYoumiInit ) {
 			gn.notifyFailed("youmi gold not init");
@@ -190,7 +191,7 @@ public class GoldManager implements InnerNotifier{
 		}
 	}
 
-	private void spendGoldYOUMI(Activity content, 
+	private void spendGoldYOUMI(Context content, 
 			int amount) {
 
 		if ( !isYoumiInit ) {
@@ -215,7 +216,7 @@ public class GoldManager implements InnerNotifier{
 		}
 	}
 
-	private void initWIYUN(Activity content) {
+	private void initWIYUN(Context content) {
 
 		if ( isWiyunInit ) {
 			return;
@@ -296,15 +297,15 @@ public class GoldManager implements InnerNotifier{
 		WiOffer.useCoins(amount);
 	}
 
-	private void showOfferWAPS(Activity content) {
+	private void showOfferWAPS(Context content) {
 		AppConnect.getInstance(content).showOffers(content);
 	}
 
-	private void refreshWAPS(Activity content) {
+	private void refreshWAPS(Context content) {
 		AppConnect.getInstance(content).getPoints(new WapsAgent(this));
 	}
 
-	private void spendGoldWAPS(Activity content, int amount) {
+	private void spendGoldWAPS(Context content, int amount) {
 
 		refreshWAPS(content);
 
@@ -312,7 +313,7 @@ public class GoldManager implements InnerNotifier{
 		.spendPoints(amount, new WapsAgent(this));
 	}
 
-	private void initTAPJOY(Activity content) {
+	private void initTAPJOY(Context content) {
 
 		if ( isTapjoyInit ) {
 			return;
@@ -370,7 +371,7 @@ public class GoldManager implements InnerNotifier{
 		.awardTapPoints(amount, new TapjoyAgent(this));
 	}
 	
-	private void initMIIDI(Activity content) {
+	private void initMIIDI(Context content) {
 
 		MiidiCredit.init(content, 
 				Config.getMiidi_Gold_APPID(), 
@@ -378,16 +379,15 @@ public class GoldManager implements InnerNotifier{
 				Config.getTESTMODE());
 		
 		MiidiCredit.setPushAdIcon(iconid);
-		MiidiCredit.getPushAd(content);
 	}
 
-	private void showOfferMIIDI(Activity content) {
+	private void showOfferMIIDI(Context content) {
 
 		MiidiCredit.showAppOffers(content);
 
 	}
 
-	private void refreshMIIDI(Activity content, boolean forceNotify) {
+	private void refreshMIIDI(Context content, boolean forceNotify) {
 
 		int tmp = MiidiCredit.getPoints(content);
 		if ( golds != tmp ) {
@@ -398,7 +398,7 @@ public class GoldManager implements InnerNotifier{
 		}
 	}
 
-	private void spendGoldMIIDI(Activity content, 
+	private void spendGoldMIIDI(Context content, 
 			int amount) {
 
 		refreshMIIDI(content, false);
@@ -417,7 +417,7 @@ public class GoldManager implements InnerNotifier{
 		}
 	}
 	
-	private void initAPPJOY(Activity content) {
+	private void initAPPJOY(Context content) {
 		if ( isAppjoyInit ) {
 			return;
 		}
@@ -425,14 +425,14 @@ public class GoldManager implements InnerNotifier{
 		isAppjoyInit = true;
 	}
 	
-	private void showOfferAPPJOY(Activity content) {
+	private void showOfferAPPJOY(Context content) {
 		if ( !isAppjoyInit ) {
 			return;
 		}
 		UUAppConnect.getInstance(content).showOffers();
 	}
 	
-	private void refreshAPPJOY(Activity content) {
+	private void refreshAPPJOY(Context content) {
 		if ( !isAppjoyInit ) {
 			return;
 		}
@@ -440,7 +440,7 @@ public class GoldManager implements InnerNotifier{
 		.getPoints(new AppjoyAgent(this));
 	}
 	
-	private void spendGoldAPPJOY(Activity content, 
+	private void spendGoldAPPJOY(Context content, 
 			int amount) {
 		if ( !isAppjoyInit ) {
 			return;
