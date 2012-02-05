@@ -12,6 +12,7 @@
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
         <javaElement handleIdentifier="=Android_Pipeline_Lib/src&lt;com.saubcy.pipeline.param"/>
+        <javaElement handleIdentifier="=Android_Pipeline_Lib/src&lt;com.saubcy.pipeline.share"/>
         <javaElement handleIdentifier="=Android_Pipeline_Lib/src&lt;com.saubcy.pipeline.gold"/>
         <javaElement handleIdentifier="=Android_Pipeline_Lib/src&lt;com.saubcy.pipeline.ads"/>
         <javaElement handleIdentifier="=Android_Pipeline_Lib/src&lt;com.saubcy.pipeline.stat"/>
