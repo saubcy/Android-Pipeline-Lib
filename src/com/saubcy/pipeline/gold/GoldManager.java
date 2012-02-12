@@ -1,15 +1,12 @@
 package com.saubcy.pipeline.gold;
 
-import net.miidi.credit.MiidiCredit;
 import android.app.Activity;
 import android.content.Context;
 
 import com.saubcy.conf.Config;
-import com.tapjoy.TapjoyConnect;
-import com.tapjoy.TapjoyLog;
+import com.saubcy.pipeline.ads.AdsManager;
 import com.uucun.adsdk.UUAppConnect;
 import com.waps.AppConnect;
-import com.wiyun.offer.WiOffer;
 import com.wiyun.offer.WiOfferClient;
 
 public class GoldManager implements InnerNotifier{
@@ -28,7 +25,7 @@ public class GoldManager implements InnerNotifier{
 	private boolean isWiyunInit = false;
 	private boolean isTapjoyInit = false;
 	private boolean isAppjoyInit = false;
-	
+
 	public void setIcon(int id) {
 		iconid = id;
 	}
@@ -146,19 +143,21 @@ public class GoldManager implements InnerNotifier{
 			break;
 		}
 	}
-	
+
 	public void awardGold(Offers offer, 
 			Activity content, int amount) {
 		gn = (GoldNotifier)content;
 		offerType = offer;
-		
+
 		switch (offer) {
 		case TAPJOY:
 			awardGoldTAPJOY(amount);
 			break;
+		case MIIDI:
+			awardGoldMIIDI(amount);
 		}
 	}
-	
+
 	private void initYOUMI(Context content) {
 
 		net.youmi.android.appoffers.AppOffersManager.init((Activity) content, 
@@ -167,13 +166,13 @@ public class GoldManager implements InnerNotifier{
 				Config.getTESTMODE());
 		isYoumiInit = true;
 	}
-	
+
 	private void showOfferYOUMI(Context content) {
 
 		net.youmi.android.appoffers.AppOffersManager.showAppOffers(content);
 
 	}
-	
+
 	private void refreshYOUMI(Context content, boolean forceNotify) {
 
 		if ( !isYoumiInit ) {
@@ -222,14 +221,14 @@ public class GoldManager implements InnerNotifier{
 			return;
 		}
 
-		WiOffer.init(content, 
+		com.wiyun.offer.WiOffer.init(content, 
 				Config.getWiyun_Gold_APPID(), 
 				Config.getWiyun_Gold_APPSEC());
 
-		WiOffer.addWiOfferClient(new WiOfferClient() {
+		com.wiyun.offer.WiOffer.addWiOfferClient(new WiOfferClient() {
 			@Override
 			public void wyOfferCompleted(String offerId, String offerName, int bonus) {
-				WiOffer.getCoins();
+				com.wiyun.offer.WiOffer.getCoins();
 			}
 
 			@Override
@@ -266,7 +265,7 @@ public class GoldManager implements InnerNotifier{
 			}
 		});
 
-		WiOffer.setSandboxMode(Config.getTESTMODE());
+		com.wiyun.offer.WiOffer.setSandboxMode(Config.getTESTMODE());
 
 		isWiyunInit = true;
 	}
@@ -277,11 +276,11 @@ public class GoldManager implements InnerNotifier{
 			return;
 		}
 
-		WiOffer.showOffers();
+		com.wiyun.offer.WiOffer.showOffers();
 	}
 
 	private void refreshWIYUN() {
-		WiOffer.getCoins();
+		com.wiyun.offer.WiOffer.getCoins();
 	}
 
 	private void spendGoldWIYUN(int amount) {
@@ -294,7 +293,7 @@ public class GoldManager implements InnerNotifier{
 			return;
 		}
 
-		WiOffer.useCoins(amount);
+		com.wiyun.offer.WiOffer.useCoins(amount);
 	}
 
 	private void showOfferWAPS(Context content) {
@@ -319,8 +318,8 @@ public class GoldManager implements InnerNotifier{
 			return;
 		}
 
-		TapjoyLog.enableLogging(Config.getLOGGING());
-		TapjoyConnect.requestTapjoyConnect(content.getApplicationContext(), 
+		com.tapjoy.TapjoyLog.enableLogging(Config.getLOGGING());
+		com.tapjoy.TapjoyConnect.requestTapjoyConnect(content.getApplicationContext(), 
 				Config.getTapjoy_Gold_APPID(), 
 				Config.getTapjoy_Gold_APPSEC());
 		isTapjoyInit = true;
@@ -331,7 +330,7 @@ public class GoldManager implements InnerNotifier{
 			return;
 		}
 
-		TapjoyConnect.getTapjoyConnectInstance().showOffers();
+		com.tapjoy.TapjoyConnect.getTapjoyConnectInstance().showOffers();
 	}
 
 	private void refreshTAPJOY() {
@@ -339,7 +338,7 @@ public class GoldManager implements InnerNotifier{
 			return;
 		}
 
-		TapjoyConnect.getTapjoyConnectInstance()
+		com.tapjoy.TapjoyConnect.getTapjoyConnectInstance()
 		.getTapPoints(new TapjoyAgent(this));
 	}
 
@@ -353,7 +352,7 @@ public class GoldManager implements InnerNotifier{
 			return;
 		}
 
-		TapjoyConnect.getTapjoyConnectInstance()
+		com.tapjoy.TapjoyConnect.getTapjoyConnectInstance()
 		.spendTapPoints(amount, new TapjoyAgent(this));
 	}
 
@@ -367,56 +366,102 @@ public class GoldManager implements InnerNotifier{
 			return;
 		}
 
-		TapjoyConnect.getTapjoyConnectInstance()
+		com.tapjoy.TapjoyConnect.getTapjoyConnectInstance()
 		.awardTapPoints(amount, new TapjoyAgent(this));
 	}
-	
+
 	private void initMIIDI(Context content) {
 
-		MiidiCredit.init(content, 
-				Config.getMiidi_Gold_APPID(), 
-				Config.getMiidi_Gold_APPSEC(), 
-				Config.getTESTMODE());
-		
-		MiidiCredit.setPushAdIcon(iconid);
+		/**
+		 * 1.x 接口
+		 */
+		//		net.miidi.credit.MiidiCredit.init(content, 
+		//				Config.getMiidi_Gold_APPID(), 
+		//				Config.getMiidi_Gold_APPSEC(), 
+		//				Config.getTESTMODE());
+		//		net.miidi.credit.MiidiCredit.setPushAdIcon(iconid);
+
+		/**
+		 * 2.x 接口
+		 */
+		if ( !AdsManager.getMiidiStatus() ) {
+			AdsManager.initMiidi(content);
+		}
+		net.miidi.credit.MiidiCredit.setOffersListener(new MiidiAgent(this));
+		net.miidi.credit.MiidiCredit.setPushAdIcon(iconid);
 	}
 
 	private void showOfferMIIDI(Context content) {
-
-		MiidiCredit.showAppOffers(content);
-
+		/**
+		 * 1.x 接口
+		 */
+		//		net.miidi.credit.MiidiCredit.showAppOffers(content);
+		/**
+		 * 2.x 接口
+		 */
+		net.miidi.credit.MiidiCredit.showAppOffers();
 	}
 
 	private void refreshMIIDI(Context content, boolean forceNotify) {
 
-		int tmp = MiidiCredit.getPoints(content);
-		if ( golds != tmp ) {
-			golds = tmp;
-			gn.notifyUpdate(golds);
-		} else if ( forceNotify ) {
-			gn.notifyUpdate(golds);
-		}
+		/**
+		 * 1.x 接口
+		 */
+		//		int tmp = net.miidi.credit.MiidiCredit.getPoints(content);
+		//		if ( golds != tmp ) {
+		//			golds = tmp;
+		//			gn.notifyUpdate(golds);
+		//		} else if ( forceNotify ) {
+		//			gn.notifyUpdate(golds);
+		//	}
+		/**
+		 * 2.x 接口
+		 */
+		net.miidi.credit.MiidiCredit.getPoints();
 	}
 
 	private void spendGoldMIIDI(Context content, 
 			int amount) {
 
-		refreshMIIDI(content, false);
-
+		/**
+		 * 1.x 接口
+		 */
+		//		refreshMIIDI(content, false);
+		//
+		//		if ( golds < amount ) {
+		//			gn.notifyFailed("miidi gold not enough");
+		//			return;
+		//		}
+		//
+		//		boolean res = net.miidi.credit.MiidiCredit.spendPoints(content, amount);
+		//		if ( res ) {
+		//			golds -= amount;
+		//			gn.notifyUpdate(golds);
+		//		} else {
+		//			gn.notifyFailed("miidi gold spend failed");
+		//		}
+		
+		/**
+		 * 2.x 接口
+		 */
 		if ( golds < amount ) {
 			gn.notifyFailed("miidi gold not enough");
 			return;
 		}
-
-		boolean res = MiidiCredit.spendPoints(content, amount);
-		if ( res ) {
-			golds -= amount;
-			gn.notifyUpdate(golds);
-		} else {
-			gn.notifyFailed("miidi gold spend failed");
-		}
+		
+		net.miidi.credit.MiidiCredit.spendPoints(amount);
 	}
 	
+	private void awardGoldMIIDI(int amount) {
+
+		if ( amount < 0 ) {
+			gn.notifyFailed("award must more then 0");
+			return;
+		}
+
+		net.miidi.credit.MiidiCredit.awardPoints(amount);
+	}
+
 	private void initAPPJOY(Context content) {
 		if ( isAppjoyInit ) {
 			return;
@@ -424,14 +469,14 @@ public class GoldManager implements InnerNotifier{
 		UUAppConnect.getInstance(content).initSdk();
 		isAppjoyInit = true;
 	}
-	
+
 	private void showOfferAPPJOY(Context content) {
 		if ( !isAppjoyInit ) {
 			return;
 		}
 		UUAppConnect.getInstance(content).showOffers();
 	}
-	
+
 	private void refreshAPPJOY(Context content) {
 		if ( !isAppjoyInit ) {
 			return;
@@ -439,7 +484,7 @@ public class GoldManager implements InnerNotifier{
 		UUAppConnect.getInstance(content)
 		.getPoints(new AppjoyAgent(this));
 	}
-	
+
 	private void spendGoldAPPJOY(Context content, 
 			int amount) {
 		if ( !isAppjoyInit ) {

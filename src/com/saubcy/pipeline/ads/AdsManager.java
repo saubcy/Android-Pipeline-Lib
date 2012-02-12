@@ -6,18 +6,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
-import com.adpooh.adscast.banner.AdkBannerView;
-import com.adpooh.adscast.banner.AdkManager;
-import com.adwo.adsdk.AdwoAdView;
-import com.donson.momark.AdManager;
-import com.donson.momark.view.view.AdView;
 import com.saubcy.conf.Config;
-import com.uucun.adsdk.UUAppConnect;
 
 public class AdsManager {
 
@@ -27,6 +22,10 @@ public class AdsManager {
 	private static boolean isAppMediaInit = false;
 	private static boolean isMiidiInit = false;
 	private static boolean isMormarkInit = false;
+
+	public static boolean getMiidiStatus() {
+		return isMiidiInit;
+	}
 
 	public enum Offers {
 		NONE, ADMOB, ADWO, YOUMI, APPMEDIA, MIIDI, WIYUN,
@@ -154,7 +153,7 @@ public class AdsManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
-		
+
 		return adView;
 	}
 
@@ -163,7 +162,8 @@ public class AdsManager {
 			return;
 		}
 
-		AdwoAdView view = (AdwoAdView)adView;
+		com.adwo.adsdk.AdwoAdView view = 
+				(com.adwo.adsdk.AdwoAdView)adView;
 		view.finalize();
 	}
 
@@ -273,7 +273,7 @@ public class AdsManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
-		
+
 		return adView;
 	}
 
@@ -335,7 +335,7 @@ public class AdsManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
-		
+
 		return adView;
 	}
 
@@ -452,19 +452,29 @@ public class AdsManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
-		
+
 		return adView;
 	}
 
 	private static View showMIIDI(Activity content, 
 			LinearLayout layout, 
 			View adView) {
-		initMiidi();
+		/**
+		 * 1.x 接口
+		 */
+		//		initMiidi(content);
+		//		adView = new com.adpooh.adscast.banner.AdkBannerView(content);
+		//		layout.addView(adView, new LayoutParams(LayoutParams.FILL_PARENT,
+		//				LayoutParams.WRAP_CONTENT) );
 
-		adView = new AdkBannerView(content);
+		/**
+		 * 2.x 接口
+		 */
+		initMiidi(content);
+		adView = new net.miidi.credit.AdView(content);
 		layout.addView(adView, new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT) );
-		
+
 		return adView;
 	}
 
@@ -479,7 +489,7 @@ public class AdsManager {
 		layout.addView(adView, new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT) );
 		((com.wiyun.ad.AdView) adView).requestAd();
-		
+
 		return adView;
 	}
 
@@ -513,7 +523,6 @@ public class AdsManager {
 			}
 			e.printStackTrace();
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
 			if ( Config.getLOGGING() ) {
@@ -521,37 +530,49 @@ public class AdsManager {
 			}
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 	}
 
-	private static void initMiidi() {
+	public static void initMiidi(Context content) {
+		/**
+		 * 1.x 接口
+		 */
+		//		if ( isMiidiInit ) {
+		//			return;
+		//		}
+		//		com.adpooh.adscast.banner.AdkManager.initialParam(Integer.parseInt(Config.getMiidi_APPID()),
+		//				Config.getMiidi_APPSEC());
+		//		isMiidiInit = true;
+
+		/**
+		 * 2.x 接口
+		 */
 		if ( isMiidiInit ) {
 			return;
 		}
-
-		AdkManager.initialParam(Integer.parseInt(Config.getMiidi_APPID()),
-				Config.getMiidi_APPSEC());
+		net.miidi.credit.MiidiCredit.init(content, 
+				Config.getMiidi_Gold_APPID(), 
+				Config.getMiidi_Gold_APPSEC(), 
+				Config.getTESTMODE());
+		isMiidiInit = true;
 	}
-	
+
 	private static void initMormark() {
 		if ( isMormarkInit ) {
 			return;
 		}
-		AdManager.init(Config.getMOMARK_APPID(), 
+		com.donson.momark.AdManager.init(Config.getMOMARK_APPID(), 
 				Config.getMOMARK_DEVID());
 		isMormarkInit = true;
 	}
 
 	private static void destoryAPPJOY(Activity content) {
-		UUAppConnect.getInstance(content).exitSdk();
+		com.uucun.adsdk.UUAppConnect.getInstance(content).exitSdk();
 	}
 
 	private static View showADULTMODA(Activity content, 
@@ -570,7 +591,7 @@ public class AdsManager {
 
 	private static View showAPPJOY(Activity content, 
 			LinearLayout layout) {
-		UUAppConnect.getInstance(content)
+		com.uucun.adsdk.UUAppConnect.getInstance(content)
 		.showBanner(layout , 20);
 		return null;
 	}
@@ -578,7 +599,8 @@ public class AdsManager {
 	private static View showMOMARK(Activity content, 
 			LinearLayout layout) {
 		initMormark();
-		AdView adView = new AdView(content); 
+		com.donson.momark.view.view.AdView adView = 
+				new com.donson.momark.view.view.AdView(content); 
 		layout.addView(adView, new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT) );
 		return adView;
