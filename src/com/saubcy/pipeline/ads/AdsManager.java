@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 import com.adpooh.adscast.banner.AdkBannerView;
 import com.adpooh.adscast.banner.AdkManager;
 import com.adwo.adsdk.AdwoAdView;
+import com.donson.momark.AdManager;
+import com.donson.momark.view.view.AdView;
 import com.saubcy.conf.Config;
 import com.uucun.adsdk.UUAppConnect;
 
@@ -24,10 +26,11 @@ public class AdsManager {
 	private static boolean isYoumiInit = false;
 	private static boolean isAppMediaInit = false;
 	private static boolean isMiidiInit = false;
+	private static boolean isMormarkInit = false;
 
 	public enum Offers {
 		NONE, ADMOB, ADWO, YOUMI, APPMEDIA, MIIDI, WIYUN,
-		ADULTMODA, APPJOY,
+		ADULTMODA, APPJOY, MOMARK,
 	};
 
 	public static View showAds(Offers offer, 
@@ -51,6 +54,8 @@ public class AdsManager {
 			return showADULTMODA(content, layout, adView);
 		case APPJOY:
 			return showAPPJOY(content, layout);
+		case MOMARK:
+			return showMOMARK(content, layout);
 		}
 		return null;
 	}
@@ -535,6 +540,15 @@ public class AdsManager {
 		AdkManager.initialParam(Integer.parseInt(Config.getMiidi_APPID()),
 				Config.getMiidi_APPSEC());
 	}
+	
+	private static void initMormark() {
+		if ( isMormarkInit ) {
+			return;
+		}
+		AdManager.init(Config.getMOMARK_APPID(), 
+				Config.getMOMARK_DEVID());
+		isMormarkInit = true;
+	}
 
 	private static void destoryAPPJOY(Activity content) {
 		UUAppConnect.getInstance(content).exitSdk();
@@ -561,4 +575,12 @@ public class AdsManager {
 		return null;
 	}
 
+	private static View showMOMARK(Activity content, 
+			LinearLayout layout) {
+		initMormark();
+		AdView adView = new AdView(content); 
+		layout.addView(adView, new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.WRAP_CONTENT) );
+		return adView;
+	}
 }

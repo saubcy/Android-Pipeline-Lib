@@ -69,6 +69,14 @@ public class Config
 	public static String getVPON_SDKKEY() {
 		return "@CONFIG.ADS.VPON.SDKKEY@";
 	}
+	
+	public static String getMOMARK_APPID() {
+		return "@CONFIG.ADS.MOMARK.APPID@";
+	}
+	
+	public static String getMOMARK_DEVID() {
+		return "@CONFIG.ADS.MOMARK.DEVID@";
+	}
 
 	// GOLD OFFER IDS
 	public static String getYoumi_Gold_APPID() {

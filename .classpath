@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="libs/Umeng-Android-SDK-SnsService.jar"/>
 	<classpathentry kind="lib" path="libs/commons-httpclient-3.1.jar"/>
 	<classpathentry kind="lib" path="libs/httpmime-4.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/momark.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
