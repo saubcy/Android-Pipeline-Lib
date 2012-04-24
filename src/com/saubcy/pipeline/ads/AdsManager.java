@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
+import cn.domob.android.ads.DomobAdManager;
+import cn.domob.android.ads.DomobAdView;
 
 import com.hiad.HiProxyLayout;
 import com.saubcy.conf.Config;
@@ -30,7 +32,7 @@ public class AdsManager {
 
 	public enum Offers {
 		NONE, ADMOB, ADWO, YOUMI, APPMEDIA, MIIDI, WIYUN,
-		ADULTMODA, APPJOY, MOMARK, HUAWEI,
+		ADULTMODA, APPJOY, MOMARK, HUAWEI, DOMOB,
 	};
 
 	public static View showAds(Offers offer, 
@@ -58,6 +60,8 @@ public class AdsManager {
 			return showMOMARK(content, layout);
 		case HUAWEI:
 			return showHUAWEI(content, layout);
+		case DOMOB:
+			return showDOMOB(content, layout);
 		}
 		return null;
 	}
@@ -620,5 +624,14 @@ public class AdsManager {
         hiproxyLayout.setHiProxyListener(new HuaweiAgent(null));
         layout.addView(hiproxyLayout);
         return hiproxyLayout;
+	}
+	
+	private static View showDOMOB(Activity content, 
+			LinearLayout layout) {
+		DomobAdView adview = new DomobAdView(content);
+		DomobAdManager.setPublisherId(Config.getDOMOB_PID());
+		adview.setRequestInterval(20);
+		layout.addView(adview);
+		return adview;
 	}
 }

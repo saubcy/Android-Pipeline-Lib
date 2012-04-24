@@ -21,5 +21,6 @@
 	<classpathentry kind="lib" path="libs/FtadSdkAndroid.jar"/>
 	<classpathentry kind="lib" path="libs/hiproxy-sdk-android.jar"/>
 	<classpathentry kind="lib" path="libs/iMochaAndroid.jar"/>
+	<classpathentry kind="lib" path="libs/domob_android_sdk-2.2.0.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
