@@ -18,5 +18,8 @@
 	<classpathentry kind="lib" path="libs/httpmime-4.1.1.jar"/>
 	<classpathentry kind="lib" path="libs/momark.jar"/>
 	<classpathentry kind="lib" path="libs/miidicredit_android_2_1_4.jar"/>
+	<classpathentry kind="lib" path="libs/FtadSdkAndroid.jar"/>
+	<classpathentry kind="lib" path="libs/hiproxy-sdk-android.jar"/>
+	<classpathentry kind="lib" path="libs/iMochaAndroid.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

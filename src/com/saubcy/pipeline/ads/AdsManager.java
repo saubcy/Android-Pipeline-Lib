@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
+import com.hiad.HiProxyLayout;
 import com.saubcy.conf.Config;
 
 public class AdsManager {
@@ -29,7 +30,7 @@ public class AdsManager {
 
 	public enum Offers {
 		NONE, ADMOB, ADWO, YOUMI, APPMEDIA, MIIDI, WIYUN,
-		ADULTMODA, APPJOY, MOMARK,
+		ADULTMODA, APPJOY, MOMARK, HUAWEI,
 	};
 
 	public static View showAds(Offers offer, 
@@ -55,6 +56,8 @@ public class AdsManager {
 			return showAPPJOY(content, layout);
 		case MOMARK:
 			return showMOMARK(content, layout);
+		case HUAWEI:
+			return showHUAWEI(content, layout);
 		}
 		return null;
 	}
@@ -604,5 +607,18 @@ public class AdsManager {
 		layout.addView(adView, new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.WRAP_CONTENT) );
 		return adView;
+	}
+	
+	private static View showHUAWEI(Activity content, 
+			LinearLayout layout) {
+		HiProxyLayout hiproxyLayout = null;
+		if ( Config.getTESTMODE() ) {
+			hiproxyLayout = new HiProxyLayout(content, "com.example");
+		} else {
+			hiproxyLayout = new HiProxyLayout(content);
+		}
+        hiproxyLayout.setHiProxyListener(new HuaweiAgent(null));
+        layout.addView(hiproxyLayout);
+        return hiproxyLayout;
 	}
 }
